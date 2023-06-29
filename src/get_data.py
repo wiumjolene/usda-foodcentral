@@ -69,3 +69,22 @@ class GetData:
                 print(f"{_}: LONG RESPONSE...")
 
         return response
+    
+
+class GetGATSData:
+    """ Class to etl data. """
+    logger = logging.getLogger(f"{__name__}.GetGATSData")
+    #database_instance = DatabaseModelsClass('MYSQLLINUX')
+    load_dotenv(find_dotenv())
+    APIKEY = os.environ.get('USDAAPI2KEY')
+    DATA_FOLDER = os.path.join(config.ROOTDIR, 'data')
+
+    def get_function(self):
+        path = os.path.join(self.DATA_FOLDER, 'raw', 'import-customsdistricts-08081000apples.xlsx')
+        df = pd.read_excel(path, engine='openpyxl')   
+
+        df = df.melt(id_vars=['U.S. Custom Districts','Partner','Product','Year'],
+                     var_name='Period', value_name='USD')
+
+        return df
+
